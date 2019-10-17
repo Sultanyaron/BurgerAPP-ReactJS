@@ -30,7 +30,6 @@ class BurgerBuilder extends Component {
             .then(res => {
                 this.setState({ingredients: res.data});
                 console.log(res);
-                
             })
             .catch(error => {
                 this.setState({error: true});
@@ -86,33 +85,20 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: false})
     };
 
-    purchaseContinuewHandler = () => {
-        // alert('You continue');
-        this.setState({loading: true});
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Yaron sultan',
-                address: {
-                    street: 'Horkenos 8',
-                    zipCode: '81500',
-                    country: 'israel'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
-        };
+    purchaseContinueHandler = () => {
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false, purchasing: false});
-                console.log('[BurgerJS Order fetch]');
-                
-            })
-            .catch(error => {
-                this.setState({loading: false, purchasing: false});
-            });
+        const queryParams = [];
+        for ( let i in this.state.ingredients) {
+            queryParams.push(i + '=' + this.state.ingredients[i]);
+        }
+        queryParams.push('price=' + this.state.totalPrice);
+        const queryString = queryParams.join('&');
+
+        this.props.history.push({
+            pathname: '/checkout/',
+            search: '?' + queryString
+        });
+
     };
 
     render () {
@@ -139,10 +125,10 @@ class BurgerBuilder extends Component {
                 </Aux>
             );
             orderSummary = <OrderSummary 
-            ingredients={this.state.ingredients}
-            price={this.state.totalPrice}
-            purchaseCancelled={this.purchaseCancelHandeler}
-            purchaseContinued={this.purchaseContinuewHandler}/>
+                ingredients={this.state.ingredients}
+                price={this.state.totalPrice}
+                purchaseCancelled={this.purchaseCancelHandeler}
+                purchaseContinued={this.purchaseContinueHandler}/>
         };
 
         if( this.state.loading ) {
