@@ -18,13 +18,12 @@ class Orders extends Component {
                         ...res.data[key],
                         id: key
                     });
-                }
-                
+                };
                 this.setState({loading: false, orders: fetchedOrders});
             })
             .catch(err =>{
                 this.setState({loading: false});
-            })
+            });
     };
 
     render() {
