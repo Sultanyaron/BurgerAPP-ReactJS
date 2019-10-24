@@ -11,7 +11,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//the NODE_ENV lets us know if we are in DEV mode, we only want the devTools to work in dev mode.
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
     burgerBuilder: burgerBuilderReducer,
